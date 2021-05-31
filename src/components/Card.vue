@@ -1,20 +1,20 @@
 <template>
-	<div class="flex flex-col bg-gray-300 w-80 rounded-lg shadow-xl mt-10">
+	<div class="flex flex-col bg-white rounded-sm shadow-lg p-8">
+		<h2 class="text-2xl font-bold">
+			<i class="fas fa-running mr-2"></i
+			><slot name="title">Placeholder Title</slot>
+		</h2>
+		<h3 class="text text-sm font-normal text-gray-500">
+			<slot name="date">Placeholder Date</slot>
+		</h3>
+		<div class="pl-5 pb-0 pt-5 font-semibold block"></div>
+		<p class="text-left pb-5 text-2xl font-medium">
+			<slot name="stats"> Placeholder body text</slot>
+		</p>
 		<img
-			class="h-40 w-auto rounded-t-lg object-cover filter"
+			class="h-60 w-auto object-cover filter"
 			src="https://source.unsplash.com/random"
 		/>
-		<h2 class="text-2xl font-semibold pt-5 text-center">
-			<slot name="title">Placeholder</slot>
-		</h2>
-		<p class="text-left p-5">
-			<slot name="body">
-				Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deserunt
-				possimus provident laborum explicabo dignissimos vero pariatur quia
-				porro deleniti modi ullam voluptatem fugiat consequuntur, rerum
-				voluptate cum? Corrupti, suscipit tempore?</slot
-			>
-		</p>
 	</div>
 </template>
 
