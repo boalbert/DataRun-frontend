@@ -4,9 +4,9 @@
 			<slot name="username">Enter Run</slot>
 		</h2>
 
-		<button @click="open = !open">
-			<i v-if="!open" class="fas fa-caret-down text-2xl text-gray-600"></i>
-			<i v-if="open" class="fas fa-sort-up text-2xl text-gray-600"></i>
+		<button class="mt-4 text-gray-600 text-2xl" @click="open = !open">
+			<i v-if="!open" class="fas fa-caret-down "></i>
+			<i v-if="open" class="fas fa-sort-up"></i>
 		</button>
 
 		<transition name="slide-fade">

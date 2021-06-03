@@ -12,5 +12,8 @@ export default {
 		Header,
 		Home,
 	},
+	mounted() {
+		console.log(process.env.VUE_APP_ROOT_URL)
+	},
 }
 </script>
