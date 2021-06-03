@@ -1,6 +1,7 @@
 # Datarunner
 Simple dashboard for keeping stats of my runs.
-See issues for future features.
+
+Basically a Strava-clone for personal use and I'm planning to add some features I'm missing.
 
 ## Implemented
 - POST New run
