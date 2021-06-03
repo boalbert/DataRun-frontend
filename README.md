@@ -1,24 +1,14 @@
-# datarunner
+# Datarunner
+Simple dashboard for keeping stats of my runs.
 
-## Project setup
-```
-npm install
-```
+Basically a Strava-clone for personal use and I'm planning to add some features I'm missing.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Implemented
+- POST New run
+- GET All runs
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## WIP
+- See issues-tab
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Demo
+Frontend can be visited at http://datarun.boalbert.se
