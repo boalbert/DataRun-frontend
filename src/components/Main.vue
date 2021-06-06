@@ -103,7 +103,7 @@ export default {
 	methods: {
 		getAllActivities() {
 			return new Promise((resolve, reject) => {
-				fetch(process.env.VUE_APP_ROOT_URL + 'activities')
+				fetch(process.env.VUE_APP_ROOT_URL + 'activities/')
 					.then((response) => response.json())
 					.then((activities) => {
 						resolve(activities)
@@ -120,7 +120,7 @@ export default {
 		},
 		async postNewActivity(activityDetails) {
 			const rawResponse = await fetch(
-				process.env.VUE_APP_ROOT_URL + 'activities',
+				process.env.VUE_APP_ROOT_URL + 'activities/',
 				{
 					method: 'POST',
 					headers: {
