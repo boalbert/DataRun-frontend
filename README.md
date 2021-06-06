@@ -12,3 +12,7 @@ Basically a Strava-clone for personal use and I'm planning to add some features 
 
 ## Demo
 Frontend can be visited at http://datarun.boalbert.se
+
+
+
+![Sample](https://raw.githubusercontent.com/boalbert/DataRun-frontend/master/sample.png)
