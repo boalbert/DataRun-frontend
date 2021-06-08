@@ -1,9 +1,6 @@
 <template>
 	<div class="flex flex-col bg-white rounded-sm shadow-lg p-8">
-		<h1 class="-mt-16 text-center text-gray-500">
-			<i class="fas fa-fill fa-3x fa-user-circle"></i>
-		</h1>
-		<h2 class="text-1xl font-bold mt-4 text-center">
+		<h2 class="text-1xl font-bold text-center text-gray-400">
 			<slot name="username">Firstname Lastname</slot>
 		</h2>
 
@@ -24,6 +21,8 @@
 			<div class="text-1xl font-bold">
 				<slot name="totalTime">DefaultTime</slot>h
 			</div>
+
+			<slot name="chart"></slot>
 		</div>
 	</div>
 </template>

@@ -1,28 +1,45 @@
 <template>
-	<div class="flex pt-14 gap-8 pl-10 bg-gray-100 ">
-		<div class="flex flex-col w-96 gap-4 max-w-4xl">
+	<div class="flex pt-14 gap-8 p-3 bg-gray-100 justify-between">
+		<div class="flex flex-col w-96 gap-4">
 			<ProfileCard>
+				<template v-slot:logo>
+					<i class="fas fa-fill fa-3x fa-user-circle"></i>
+				</template>
 				<template v-slot:username>
-					Albert Andersson
+					Total
 				</template>
 				<template v-slot:totalDistance> {{ totalDistance }} </template>
 				<template v-slot:countRuns> {{ countRuns }} </template>
 				<template v-slot:totalTime> {{ totalTime }} </template>
 			</ProfileCard>
 
-			<EmptyCard>
-				<Bar :data="testData" :options="options" />
-			</EmptyCard>
+			<ProfileCard>
+				<template v-slot:username>
+					This Week
+				</template>
+				<template v-slot:totalDistance> {{ dataThisWeek.distance }} </template>
+				<template v-slot:countRuns> {{ dataThisWeek.runs }} </template>
+				<template v-slot:totalTime> {{ dataThisWeek.duration }} </template>
+			</ProfileCard>
 
-			<PostRun @submit-activity="postNewActivity" />
+			<EmptyCard>
+				<template v-slot:bar>
+					<Bar :data="testData" :options="options" />
+				</template>
+			</EmptyCard>
 		</div>
-		<div class="flex flex-wrap flex-col gap-4 w-4/12">
+
+		<div class="flex flex-wrap flex-col gap-4 w-96">
+			<SearchBar
+				@search-by-date="searchByDate"
+				@clear-search="fillActivitiesList"
+			/>
 			<Card
 				v-for="(activity, index) in activitiesByDate"
 				v-bind:key="activity.id"
 			>
 				<template v-slot:date>
-					{{ activity.date }} | {{ activity.shoes }}
+					ID#{{ activity.id }} | {{ activity.date }} | {{ activity.shoes }}
 				</template>
 				<template v-slot:title>
 					{{ activity.name }}
@@ -44,6 +61,9 @@
 				</template>
 			</Card>
 		</div>
+		<div class="w-96">
+			<PostRun @submit-activity="postNewActivity" />
+		</div>
 	</div>
 </template>
 
@@ -52,6 +72,7 @@ import Card from '@/components/Card.vue'
 import ProfileCard from '@/components/ProfileCard.vue'
 import PostRun from '@/components/PostRun.vue'
 import EmptyCard from '@/components/EmptyCard.vue'
+import SearchBar from '@/components/SearchBar.vue'
 import { Bar } from 'vue-chart-3'
 import { computed, ref } from 'vue'
 
@@ -63,6 +84,7 @@ export default {
 		PostRun,
 		EmptyCard,
 		Bar,
+		SearchBar,
 	},
 
 	setup() {
@@ -96,7 +118,10 @@ export default {
 	data() {
 		return {
 			allActivites: [],
+			activitiesThisWeek: [],
 			dataLoaded: false,
+			CurrentWeekStartDate: '',
+			CurrentWeekEndDate: '',
 		}
 	},
 
@@ -115,9 +140,42 @@ export default {
 					})
 			})
 		},
+
+		async searchByDate(searchParams) {
+			this.allActivities = await this.getByDate(
+				searchParams.start,
+				searchParams.end
+			)
+		},
+
+		getByDate(start, end) {
+			return new Promise((resolve, reject) => {
+				fetch(
+					process.env.VUE_APP_ROOT_URL +
+						`activities/search?start=${start}&end=${end}`
+				)
+					.then((response) => response.json())
+					.then((activities) => {
+						resolve((this.allActivites = activities))
+						this.dataLoaded = true
+					})
+					.catch((err) => {
+						console.log(err)
+						console.log(reject)
+					})
+			})
+		},
 		async fillActivitiesList() {
 			this.allActivites = await this.getAllActivities()
 		},
+
+		async fillActivitiesThisWeekList() {
+			this.activitiesThisWeek = await this.getByDate(
+				this.CurrentWeekStartDate,
+				this.CurrentWeekEndDate
+			)
+		},
+
 		async postNewActivity(activityDetails) {
 			const rawResponse = await fetch(
 				process.env.VUE_APP_ROOT_URL + 'activities/',
@@ -139,6 +197,9 @@ export default {
 			fetch(process.env.VUE_APP_ROOT_URL + `activities/${id}`, {
 				method: 'DELETE',
 			}).then(this.allActivites.splice(index, 1))
+
+			console.log('Trying to delete / splice /activities/ at: ')
+			console.log(`id: ${id} - index: ${index}`)
 		},
 		currentWeek() {
 			let currentdate = new Date()
@@ -149,6 +210,17 @@ export default {
 			let result = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7)
 
 			return result
+		},
+		calculateCurrentWeek() {
+			let today = new Date()
+			let nextWeek = new Date(
+				today.getUTCFullYear(),
+				today.getUTCMonth(),
+				today.getUTCDate() + 7
+			)
+			let start = today.toLocaleDateString('sv-SE')
+			let end = nextWeek.toLocaleDateString('sv-SE')
+			return [start, end]
 		},
 	},
 	computed: {
@@ -182,9 +254,46 @@ export default {
 		runningPace(time, distance) {
 			return time / distance
 		},
+
+		// dataThisWeek() {
+
+		// 	let distanceThisWeek = this.activitiesThisWeek.reduce(function(acc, curr) {
+		// 		return acc + curr.distance
+		// 	}, 0)
+
+		// 	return distanceThisWeek
+		// },
+
+		dataThisWeek() {
+			let statsThisWeek = this.activitiesThisWeek
+
+			let statsObject = {
+				distance: '',
+				duration: '',
+				runs: '',
+			}
+
+			// let timeThisWeek = this.activitiesThisWeek
+			statsObject.distance = statsThisWeek.reduce(function(acc, curr) {
+				return acc + curr.distance
+			}, 0)
+
+			statsObject.duration = statsThisWeek
+				.reduce(function(acc, curr) {
+					return acc + curr.duration
+				}, 0)
+				.toFixed(2)
+
+			statsObject.runs = statsThisWeek.length
+
+			return statsObject
+		},
 	},
 	mounted() {
+		this.CurrentWeekStartDate = this.calculateCurrentWeek()[0]
+		this.CurrentWeekEndDate = this.calculateCurrentWeek()[1]
 		this.fillActivitiesList()
+		this.fillActivitiesThisWeekList()
 	},
 }
 </script>

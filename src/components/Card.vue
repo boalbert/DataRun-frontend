@@ -30,6 +30,7 @@ export default {
 	name: 'Card',
 	props: {
 		activites: Array,
+		
 	},
 }
 </script>

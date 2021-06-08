@@ -1,11 +1,11 @@
 <template>
 	<div class="flex flex-col bg-white rounded-sm shadow-lg p-8 h-auto">
 		<h2 class="text-1xl font-semibold text-center">
-			<slot name="username">Enter Run</slot>
+			<slot name="username">ADD NEW RUN</slot>
 		</h2>
 
-		<button class="mt-4 text-gray-600 text-2xl" @click="open = !open">
-			<i v-if="!open" class="fas fa-caret-down "></i>
+		<button class="mt-4 text-gray-600 text-1xl" @click="open = !open">
+			<i v-if="!open" class="fas fa-plus"></i>
 			<i v-if="open" class="fas fa-sort-up"></i>
 		</button>
 
