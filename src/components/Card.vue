@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col bg-white rounded-sm shadow-lg p-4">
+	<div class="flex flex-col bg-white rounded-sm shadow-md p-4">
 		<div class="flex justify-between">
 			<h2 class="text-1xl font-bold">
 				<i class="fas fa-running mr-2"></i
@@ -19,7 +19,7 @@
 		</div>
 
 		<img
-			class="h-32 w-auto object-cover filter"
+			class="h-32 w-auto object-cover filter hidden md:block lg:block xl:block 2xl:block"
 			src="https://source.unsplash.com/random"
 		/>
 	</div>
@@ -30,7 +30,6 @@ export default {
 	name: 'Card',
 	props: {
 		activites: Array,
-		
 	},
 }
 </script>

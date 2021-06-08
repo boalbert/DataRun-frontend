@@ -1,10 +1,9 @@
 <template>
-	<div class="flex pt-14 gap-8 p-3 bg-gray-100 justify-between">
-		<div class="flex flex-col w-96 gap-4">
+	<div
+		class="flex flex-col gap-12 p-8 bg-gray-100 lg:flex-row xl:flex-row 2xl:flex-row justify-center"
+	>
+		<div class="flex gap-4 flex-col">
 			<ProfileCard>
-				<template v-slot:logo>
-					<i class="fas fa-fill fa-3x fa-user-circle"></i>
-				</template>
 				<template v-slot:username>
 					Total
 				</template>
@@ -13,14 +12,7 @@
 				<template v-slot:totalTime> {{ totalTime }} </template>
 			</ProfileCard>
 
-			<ProfileCard>
-				<template v-slot:username>
-					This Week
-				</template>
-				<template v-slot:totalDistance> {{ dataThisWeek.distance }} </template>
-				<template v-slot:countRuns> {{ dataThisWeek.runs }} </template>
-				<template v-slot:totalTime> {{ dataThisWeek.duration }} </template>
-			</ProfileCard>
+			<ThisWeekCard />
 
 			<EmptyCard>
 				<template v-slot:bar>
@@ -73,6 +65,7 @@ import ProfileCard from '@/components/ProfileCard.vue'
 import PostRun from '@/components/PostRun.vue'
 import EmptyCard from '@/components/EmptyCard.vue'
 import SearchBar from '@/components/SearchBar.vue'
+import ThisWeekCard from '@/components/ThisWeekCard.vue'
 import { Bar } from 'vue-chart-3'
 import { computed, ref } from 'vue'
 
@@ -85,6 +78,7 @@ export default {
 		EmptyCard,
 		Bar,
 		SearchBar,
+		ThisWeekCard,
 	},
 
 	setup() {
@@ -118,10 +112,7 @@ export default {
 	data() {
 		return {
 			allActivites: [],
-			activitiesThisWeek: [],
 			dataLoaded: false,
-			CurrentWeekStartDate: '',
-			CurrentWeekEndDate: '',
 		}
 	},
 
@@ -169,13 +160,6 @@ export default {
 			this.allActivites = await this.getAllActivities()
 		},
 
-		async fillActivitiesThisWeekList() {
-			this.activitiesThisWeek = await this.getByDate(
-				this.CurrentWeekStartDate,
-				this.CurrentWeekEndDate
-			)
-		},
-
 		async postNewActivity(activityDetails) {
 			const rawResponse = await fetch(
 				process.env.VUE_APP_ROOT_URL + 'activities/',
@@ -200,27 +184,6 @@ export default {
 
 			console.log('Trying to delete / splice /activities/ at: ')
 			console.log(`id: ${id} - index: ${index}`)
-		},
-		currentWeek() {
-			let currentdate = new Date()
-			let oneJan = new Date(currentdate.getFullYear(), 0, 1)
-			let numberOfDays = Math.floor(
-				(currentdate - oneJan) / (24 * 60 * 60 * 1000)
-			)
-			let result = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7)
-
-			return result
-		},
-		calculateCurrentWeek() {
-			let today = new Date()
-			let nextWeek = new Date(
-				today.getUTCFullYear(),
-				today.getUTCMonth(),
-				today.getUTCDate() + 7
-			)
-			let start = today.toLocaleDateString('sv-SE')
-			let end = nextWeek.toLocaleDateString('sv-SE')
-			return [start, end]
 		},
 	},
 	computed: {
@@ -254,46 +217,9 @@ export default {
 		runningPace(time, distance) {
 			return time / distance
 		},
-
-		// dataThisWeek() {
-
-		// 	let distanceThisWeek = this.activitiesThisWeek.reduce(function(acc, curr) {
-		// 		return acc + curr.distance
-		// 	}, 0)
-
-		// 	return distanceThisWeek
-		// },
-
-		dataThisWeek() {
-			let statsThisWeek = this.activitiesThisWeek
-
-			let statsObject = {
-				distance: '',
-				duration: '',
-				runs: '',
-			}
-
-			// let timeThisWeek = this.activitiesThisWeek
-			statsObject.distance = statsThisWeek.reduce(function(acc, curr) {
-				return acc + curr.distance
-			}, 0)
-
-			statsObject.duration = statsThisWeek
-				.reduce(function(acc, curr) {
-					return acc + curr.duration
-				}, 0)
-				.toFixed(2)
-
-			statsObject.runs = statsThisWeek.length
-
-			return statsObject
-		},
 	},
 	mounted() {
-		this.CurrentWeekStartDate = this.calculateCurrentWeek()[0]
-		this.CurrentWeekEndDate = this.calculateCurrentWeek()[1]
 		this.fillActivitiesList()
-		this.fillActivitiesThisWeekList()
 	},
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-	<header class="flex drop-shadow-2xl p-4 bg-white bg-opacity-95 pl-24">
+	<header class="flex shadow-2xl p-4 bg-white bg-opacity-95 pl-24">
 		<div>
 			<h1
 				class="font-sans tracking-widest text-3xl text-red-400 text-opacity-70 font-bold ml-4 "

@@ -1,10 +1,10 @@
 <template>
-	<div class="flex flex-col bg-white rounded-sm shadow-lg p-8">
-		<h2 class="text-1xl font-bold text-center text-gray-400">
-			<slot name="username">Firstname Lastname</slot>
+	<div class="flex flex-col bg-white rounded-sm shadow-md p-6">
+		<h2 class="text-2xl font-semibold text-center text-gray-400 mb-4">
+			<slot name="username">Title</slot>
 		</h2>
 
-		<div class="text-center grid grid-cols-3 mt-4 font-semibold">
+		<div class="text-center grid grid-cols-3 font-semibold">
 			<div class="text-gray-400">
 				Runs
 			</div>

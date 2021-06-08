@@ -1,5 +1,5 @@
 <template>
-	<div class="flex bg-white rounded-sm shadow-lg p-4 gap-2">
+	<div class="flex bg-white rounded-sm shadow-md p-6 gap-2">
 		<form @submit.prevent="searchByDate(searchParams)" class=" flex gap-2">
 			<input
 				type="date"
